@@ -16,6 +16,9 @@ public class HttpManager {
 
             URL url = new URL(uri);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type","application/json");
+
             StringBuilder stringBuilder = new StringBuilder();
             br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
