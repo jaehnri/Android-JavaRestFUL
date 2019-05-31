@@ -1,4 +1,4 @@
-package br.unicamp.agendadealunos;
+package br.unicamp.asynctaskws;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
