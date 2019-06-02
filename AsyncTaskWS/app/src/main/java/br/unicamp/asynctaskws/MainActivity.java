@@ -110,8 +110,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground (String... params) {
 
-            String conteudo = HttpManager.getDados(params[0]);
-            return conteudo;
+            //String conteudo = HttpManager.getDados(params[0]);
+            //return conteudo;
+            Cliente clientrest = new Cliente();
+            try
+            {
+                String conteudo = clientrest.getAlunos();
+                return conteudo;
+            }
+            catch (Exception ex) {
+                return ex.getMessage();
+            }
         }
 
         @Override
