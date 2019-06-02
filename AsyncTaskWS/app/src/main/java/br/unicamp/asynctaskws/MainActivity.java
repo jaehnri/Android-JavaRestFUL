@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView    tvTarefa;
     ProgressBar progressBar;
-    List<Produto> produtoList;
+    List<Aluno> alunoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        produtoList = new ArrayList<>();
+        alunoList = new ArrayList<>();
     }
 
     private boolean isOnline() {
@@ -51,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void atualizarView(){
-        if (produtoList != null) {
-            for (Produto produto : produtoList) {
-                tvTarefa.append(produto.getNome() + "\n");
+        if (alunoList != null) {
+            for (Aluno aluno: alunoList) {
+                tvTarefa.append(aluno.getRA() + "\n");
+                tvTarefa.append(aluno.getNome() + "\n");
+                tvTarefa.append(aluno.getCorreio() + "\n");
             }
         }
     }
@@ -76,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (isOnline()) {
                 //buscarDados("http://177.220.18.68:3000/api/produtos/xml");
-                buscarDados("http://177.220.18.68:3000/api/produtos/json"); // meu ip:3000/
+                //buscarDados("http://192.168.0.16:3000/api/produtos/json");
+                buscarDados("http://10.0.2.2:8080/restful-webproject/webresources/generic/GetAlunos");
             } else {
                 Toast.makeText(this, "Rede não está disponível", Toast.LENGTH_SHORT).show();
             }
@@ -102,21 +105,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
-            //atualizarView("Tarefa iniciada");
         }
 
         @Override
         protected String doInBackground (String... params) {
-            /*for (String s : params) {
-                try {
-                    publishProgress("Trabalhando com: " + s);
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return "Tarefa concluída"*/ // antigo
 
             String conteudo = HttpManager.getDados(params[0]);
             return conteudo;
@@ -125,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             //atualizarView(s);
-            produtoList = ProdutoJSONParser.parseDados(s);
+            alunoList = AlunoJsonParser.parseDados(s);
             atualizarView();
             progressBar.setVisibility(View.INVISIBLE);
         }
