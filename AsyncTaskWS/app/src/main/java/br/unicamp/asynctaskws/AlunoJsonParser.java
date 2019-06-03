@@ -19,8 +19,8 @@ public class AlunoJsonParser
                 Aluno aluno = new Aluno();
 
                 aluno.setRA(jsonObject.getString("RA"));
-                aluno.setNome(jsonObject.getString("Nome"));
-                aluno.setCorreio(jsonObject.getString("Correio"));
+                aluno.setNome(jsonObject.getString("nome"));
+                aluno.setCorreio(jsonObject.getString("correio"));
 
                 alunoList.add(aluno);
             }

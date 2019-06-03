@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,22 +23,68 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView    tvTarefa;
-    ProgressBar progressBar;
-    List<Aluno> alunoList;
+    public String QualMetodo = "";
 
+    ProgressBar      progressBar;
+    ListView         lvAlunos;
+    ArrayList<Aluno> alunosList;
+    Button           btnConsultarTodos;
+    Button           btnConsultarRA;
+    TextView         edRA;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvTarefa    = findViewById(R.id.tvTarefa);
-        tvTarefa.setMovementMethod(new ScrollingMovementMethod());
+        lvAlunos = findViewById(R.id.lvAlunos);
+        alunosList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        alunoList = new ArrayList<>();
+        edRA = findViewById(R.id.edRA);
+
+        btnConsultarTodos = findViewById(R.id.btnConsultarTodos);
+        btnConsultarTodos.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (isOnline())
+                {
+                    QualMetodo = "1";
+                    MinhaAsyncTask minhaAsyncTask = new MinhaAsyncTask();
+                    minhaAsyncTask.execute(QualMetodo);
+                }
+            }
+        });
+
+        btnConsultarRA = findViewById(R.id.btnConsultarRA);
+        btnConsultarRA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (edRA.getText().toString().matches(""))
+                {
+                    Toast.makeText(getApplicationContext(),"RA não pode ser nulo!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (edRA.getText().toString().length() != 5 )
+                {
+                    Toast.makeText(getApplicationContext(),"RA inválido!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (isOnline())
+                {
+                    QualMetodo = "2";
+                    String RA = edRA.getText().toString();
+                    MinhaAsyncTask minhaAsyncTask = new MinhaAsyncTask();
+                    minhaAsyncTask.execute(QualMetodo, RA);
+                }
+            }
+        });
     }
 
     private boolean isOnline() {
@@ -48,49 +96,6 @@ public class MainActivity extends AppCompatActivity {
         else
             return false;
 
-    }
-
-    protected void atualizarView(){
-        if (alunoList != null) {
-            for (Aluno aluno: alunoList) {
-                tvTarefa.append(aluno.getRA() + "\n");
-                tvTarefa.append(aluno.getNome() + "\n");
-                tvTarefa.append(aluno.getCorreio() + "\n");
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.iniciar_tarefa) {
-            /*MinhaAsyncTask task = new MinhaAsyncTask();
-            String[] tasks = new String[10];
-            for (int i=0; i<10; i++) {
-                tasks[i] = "Task " + i;
-            }
-            task.execute(tasks);*/
-
-            if (isOnline()) {
-                //buscarDados("http://177.220.18.68:3000/api/produtos/xml");
-                //buscarDados("http://192.168.0.16:3000/api/produtos/json");
-                buscarDados("http://10.0.2.2:8080/restful-webproject/webresources/generic/GetAlunos");
-            } else {
-                Toast.makeText(this, "Rede não está disponível", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        if (item.getItemId() == R.id.limpar_tarefas) {
-            tvTarefa.setText("");
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void buscarDados(String uri) {
@@ -108,26 +113,47 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground (String... params) {
+        protected String doInBackground (String... params)
+        {
 
-            //String conteudo = HttpManager.getDados(params[0]);
-            //return conteudo;
-            Cliente clientrest = new Cliente();
-            try
-            {
-                String conteudo = clientrest.getAlunos();
+            Cliente cliente = new Cliente();
+            String conteudo = "";
+
+                if (params[0].equals("1"))
+                {
+                    try
+                    {
+                        conteudo = cliente.getAlunos();
+                        return conteudo;
+                    }
+                    catch (Exception ex)
+                    {
+                        return ex.getMessage();
+                    }
+                }
+
+                if (params[0].equals("2"))
+                {
+                    try
+                    {
+                        conteudo = cliente.getAlunoRA(params[1]);
+                        return conteudo;
+                    }
+                    catch (Exception ex)
+                    {
+                        return ex.getMessage();
+                    }
+                }
                 return conteudo;
             }
-            catch (Exception ex) {
-                return ex.getMessage();
-            }
-        }
 
         @Override
         protected void onPostExecute(String s) {
             //atualizarView(s);
-            alunoList = AlunoJsonParser.parseDados(s);
-            atualizarView();
+            alunosList = AlunoJsonParser.parseDados(s);
+            ListaAlunosAdapter alunosAdapter = new ListaAlunosAdapter(MainActivity.this, alunosList);
+            lvAlunos.setAdapter(alunosAdapter);
+            //atualizarView();
             progressBar.setVisibility(View.INVISIBLE);
         }
 

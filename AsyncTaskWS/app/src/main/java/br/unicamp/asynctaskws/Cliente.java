@@ -142,14 +142,11 @@ public class Cliente {
     }
     
     public String getAlunos() throws MalformedURLException, IOException {
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/GetAlunos");
+        URL objURL = new URL("http://10.0.2.2:8080/restful-webproject/webresources/generic/GetAlunos");
         HttpURLConnection con = (HttpURLConnection) objURL.openConnection();
         con.setRequestMethod("GET");
         
         int responseCode = con.getResponseCode();
-
-        System.out.println("Enviando requisição 'GET'");
-        System.out.println("Response Code: "+ responseCode);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         StringBuffer response = new StringBuffer();
@@ -189,14 +186,11 @@ public class Cliente {
     }
     
     public String getAlunoRA(String RA) throws MalformedURLException, IOException{
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/GetAlunoByRA/"+RA);
+        URL objURL = new URL("http://10.0.2.2:8080/restful-webproject/webresources/generic/GetAlunoByRA/"+RA);
         HttpURLConnection con = (HttpURLConnection) objURL.openConnection();
         
         con.setRequestMethod("GET");
         int responseCode = con.getResponseCode();
-        
-        System.out.println("Enviando requisição 'GET'");
-        System.out.println("Response Code: "+ responseCode);
         
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         
