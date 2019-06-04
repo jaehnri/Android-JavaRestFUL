@@ -213,9 +213,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground (String... params)
         {
-
+            Gson gson = new Gson();
             Cliente cliente = new Cliente();
             String conteudo = "";
+            String response = "";
 
                 if (params[0].equals("1"))
                 {
@@ -234,8 +235,9 @@ public class MainActivity extends AppCompatActivity {
                 {
                     try
                     {
-                        conteudo = cliente.getAlunoRA(params[1]);
-                        return conteudo;
+                        response = cliente.getAlunoRA(params[1]);
+                        //Aluno aluno = (Aluno)gson.fromJson(response, Aluno.class);
+                        return response;
                     }
                     catch (Exception ex)
                     {
@@ -247,8 +249,8 @@ public class MainActivity extends AppCompatActivity {
                 {
                     try
                     {
-                        cliente.deleteAluno(params[1]);
-                        return "Excluido";
+                        response = cliente.deleteAluno(params[1]);
+                        return response;
                     }
                     catch (Exception ex)
                     {
@@ -259,30 +261,26 @@ public class MainActivity extends AppCompatActivity {
 
             if (params[0].equals("4"))
             {
-                String response = null;
                 try
                 {
                     Aluno aluno = new Aluno(params[1], params[2], params[3]);
-                    Gson gson = new Gson();
 
                     String aluno_json = gson.toJson(aluno);
                     response = cliente.postAluno(aluno_json);
 
-                    return "Inserido";
+                    return response;
                 }
                 catch (Exception ex)
                 {
-                    //return ex.getMessage();
+                    return ex.getMessage();
                 }
             }
 
             if (params[0].equals("5"))
             {
-                String response = null;
                 try
                 {
                     Aluno aluno = new Aluno(params[1], params[2], params[3]);
-                    Gson gson = new Gson();
                     String aluno_json = gson.toJson(aluno);
                     response = cliente.putAluno(aluno_json);
 
@@ -302,30 +300,14 @@ public class MainActivity extends AppCompatActivity {
             //atualizarView(s);
             Cliente client = new Cliente();
 
-            if (s.equals("Excluido"))
+            if (QualMetodo.equals("3"))
             {
                 Toast.makeText(getApplicationContext(),"Exclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
-                try
-                {
-                    s = client.getAlunos();
-                }
-                catch (Exception ex)
-                {
-                    // nothing here
-                }
             }
 
-            if (s.equals("Inserido"))
+            if (QualMetodo.equals("4"))
             {
                 Toast.makeText(getApplicationContext(),"Inclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
-                try
-                {
-                    s = client.getAlunos();
-                }
-                catch (Exception ex)
-                {
-                    // nothing here
-                }
             }
 
             if (s.equals("Alterado"))

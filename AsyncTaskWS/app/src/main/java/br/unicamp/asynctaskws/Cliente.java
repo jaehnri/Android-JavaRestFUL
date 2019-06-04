@@ -162,7 +162,7 @@ public class Cliente {
     }
     
     public String getAlunoNome(String Nome) throws MalformedURLException, IOException {
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/GetAlunoByNome/"+Nome);
+        URL objURL = new URL("http://http://10.0.2.2:8080/restful-webproject/webresources/generic/GetAlunoByNome/"+Nome);
         HttpURLConnection con = (HttpURLConnection) objURL.openConnection();
         
         con.setRequestMethod("GET");
@@ -206,7 +206,7 @@ public class Cliente {
     }
     
     public String deleteAluno(String RA) throws MalformedURLException, IOException{
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/DeleteAluno/"+RA);
+        URL objURL = new URL("http://10.0.2.2:8080/restful-webproject/webresources/generic/DeleteAluno/"+RA);
         HttpURLConnection con = (HttpURLConnection) objURL.openConnection();
         
         con.setRequestMethod("GET");
@@ -228,20 +228,20 @@ public class Cliente {
     }
     
     public String postAluno(String aluno_json) throws MalformedURLException, IOException{
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/PostAluno");
+        URL objURL = new URL("http://http://10.0.2.2:8080/restful-webproject/webresources/generic/PostAluno");
         HttpURLConnection con = (HttpURLConnection)objURL.openConnection();
         
         con.setDoOutput(true);
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "application/json");
 
-        System.out.println("Enviando requisição 'POST'");
+        //System.out.println("Enviando requisição 'POST'");
         OutputStream os = con.getOutputStream();
         
         os.write(aluno_json.getBytes());
         
         int responseCode = con.getResponseCode();
-        System.out.println("Response Code: "+ responseCode);
+        //System.out.println("Response Code: "+ responseCode);
         
         //Armazena o retorno do método POST do servidor        
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream())); 
@@ -258,7 +258,7 @@ public class Cliente {
     
     
     public String putAluno(String aluno_json) throws MalformedURLException, IOException {
-        URL objURL = new URL("http://localhost:8080/restful-webproject/webresources/generic/PutAluno");
+        URL objURL = new URL("http://http://10.0.2.2:8080/restful-webproject/webresources/generic/PutAluno");
         HttpURLConnection con = (HttpURLConnection)objURL.openConnection();
         
         con.setDoOutput(true);
@@ -266,13 +266,13 @@ public class Cliente {
         con.setRequestMethod("PUT");
         con.setRequestProperty("Content-Type", "application/json");
         
-        System.out.println("Enviando requisição 'PUT'");
+        //System.out.println("Enviando requisição 'PUT'");
         
         OutputStream os = con.getOutputStream();    
         os.write(aluno_json.getBytes());
         
         int responseCode = con.getResponseCode();
-        System.out.println("Response Code: "+ responseCode);
+        //System.out.println("Response Code: "+ responseCode);
         
         //Armazena o retorno do método POST do servidor        
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream())); 
