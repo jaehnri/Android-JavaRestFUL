@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AsyncTaskWS</string>
+    <string name="app_name">Android RESTful Client</string>
+    <color name="pastelpink">#FFD1DC</color>
 </resources>

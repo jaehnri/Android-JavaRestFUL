@@ -228,7 +228,7 @@ public class Cliente {
     }
     
     public String postAluno(String aluno_json) throws MalformedURLException, IOException{
-        URL objURL = new URL("http://http://10.0.2.2:8080/restful-webproject/webresources/generic/PostAluno");
+        URL objURL = new URL("http://10.0.2.2:8080/restful-webproject/webresources/generic/PostAluno");
         HttpURLConnection con = (HttpURLConnection)objURL.openConnection();
         
         con.setDoOutput(true);
@@ -258,7 +258,7 @@ public class Cliente {
     
     
     public String putAluno(String aluno_json) throws MalformedURLException, IOException {
-        URL objURL = new URL("http://http://10.0.2.2:8080/restful-webproject/webresources/generic/PutAluno");
+        URL objURL = new URL("http://10.0.2.2:8080/restful-webproject/webresources/generic/PutAluno");
         HttpURLConnection con = (HttpURLConnection)objURL.openConnection();
         
         con.setDoOutput(true);
