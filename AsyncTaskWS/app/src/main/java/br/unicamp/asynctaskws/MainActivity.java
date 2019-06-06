@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     QualMetodo = "1";
                     MinhaAsyncTask minhaAsyncTask = new MinhaAsyncTask();
                     minhaAsyncTask.execute(QualMetodo);
+                    EsconderTeclado(MainActivity.this);
                     LimparCampos();
                 }
             }
@@ -218,123 +219,75 @@ public class MainActivity extends AppCompatActivity {
             String conteudo = "";
             String response = "";
 
-            try
-            {
-                switch (params[0])
-                {
+            try {
+                switch (params[0]) {
                     case "1":  // consulta todos
-                        {
-                        try
-                        {
-                            conteudo = cliente.getAlunos();
-                            return conteudo;
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.getMessage();
-                        }
+                    {
+                        return cliente.getAlunos();
                     }
                     case "2": // consulta por ra
                     {
-                        if (params[0].equals("2"))
-                        {
-                            try
-                            {
-                                response = cliente.getAlunoRA(params[1]);
-                                return response;
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.getMessage();
-                            }
-
-                        }
+                        return cliente.getAlunoRA(params[1]);
                     }
                     case "3": // exclusão por ra
-                        if (params[0].equals("3"))
-                        {
-                            try
-                            {
-                                response = cliente.deleteAluno(params[1]);
-                                return response;
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.getMessage();
-                            }
-                        }
+                    {
+                        return cliente.deleteAluno(params[1]);
+                    }
                     case "4": // insercao de aluno
                     {
-                        if (params[0].equals("4"))
-                        {
-                            try
-                            {
-                                Aluno aluno = new Aluno(params[1], params[2], params[3]);
+                        Aluno aluno = new Aluno(params[1], params[2], params[3]);
 
-                                String aluno_json = gson.toJson(aluno);
-                                response = cliente.postAluno(aluno_json);
+                        String aluno_json = gson.toJson(aluno);
+                        response = cliente.postAluno(aluno_json);
 
-                                return response;
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.getMessage();
-                            }
-                        }
+                        return response;
                     }
                     case "5": // alteracao por ra
                     {
-                        if (params[0].equals("5"))
-                        {
-                            try
-                            {
-                                Aluno aluno = new Aluno(params[1], params[2], params[3]);
-                                String aluno_json = gson.toJson(aluno);
-                                response = cliente.putAluno(aluno_json);
+                        Aluno aluno = new Aluno(params[1], params[2], params[3]);
 
-                                return response;
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.getMessage();
-                            }
-                        }
+                        String aluno_json = gson.toJson(aluno);
+                        response = cliente.putAluno(aluno_json);
+
+                        return response;
                     }
-
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
+                QualMetodo = "-1";
                 return ex.getMessage();
             }
 
-                return conteudo;
-            }
+            return conteudo;
+        }
 
         @Override
         protected void onPostExecute(String s) {
-            //atualizarView(s);
-            Cliente client = new Cliente();
+            lvAlunos.setAdapter(null);
 
-            if (QualMetodo.equals("3"))
+            if (QualMetodo.equals("-1"))
             {
-                Toast.makeText(getApplicationContext(),"Exclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Operação mal sucedida!!", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                if (QualMetodo.equals("3"))
+                {
+                    Toast.makeText(getApplicationContext(),"Exclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
+                } else if (QualMetodo.equals("4"))
+                {
+                    Toast.makeText(getApplicationContext(),"Inclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
+                } else if (QualMetodo.equals("5"))
+                {
+                    Toast.makeText(getApplicationContext(),"Alteração feita com sucesso!!", Toast.LENGTH_SHORT).show();
+                }
+
+                alunosList = AlunoJsonParser.parseDados(s);
+                ListaAlunosAdapter alunosAdapter = new ListaAlunosAdapter(MainActivity.this, alunosList);
+                lvAlunos.setAdapter(alunosAdapter);
             }
 
-            if (QualMetodo.equals("4"))
-            {
-                Toast.makeText(getApplicationContext(),"Inclusão feita com sucesso!!", Toast.LENGTH_SHORT).show();
-            }
-
-            if (QualMetodo.equals("5"))
-            {
-                Toast.makeText(getApplicationContext(),"Alteração feita com sucesso!!", Toast.LENGTH_SHORT).show();
-            }
-
-            alunosList = AlunoJsonParser.parseDados(s);
-            ListaAlunosAdapter alunosAdapter = new ListaAlunosAdapter(MainActivity.this, alunosList);
-            lvAlunos.setAdapter(alunosAdapter);
-            //atualizarView();
             progressBar.setVisibility(View.INVISIBLE);
         }
 
