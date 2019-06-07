@@ -1,4 +1,0 @@
-#Fri May 24 00:08:01 BRT 2019
-base.0=C\:\\Users\\GAMER\\Documents\\GitHub\\JavaRestFUL-AsyncTask\\Android-JavaRestFUL\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\7
-path.0=classes.dex
-renamed.0=classes.dex
